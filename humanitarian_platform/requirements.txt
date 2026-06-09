@@ -1,0 +1,17 @@
+# مكتبات منصة إدارة المشاريع الإنسانية
+# Humanitarian Platform Dependencies
+
+# واجهة المستخدم الرسومية
+tkinter (مدمج مع Python)
+
+# التقويم (لاختيار التواريخ)
+tkcalendar>=1.6.1
+
+# طباعة PDF (للتقارير)
+reportlab>=4.0.0
+
+# تصدير Excel
+openpyxl>=3.1.0
+
+# إنشاء تطبيقات Windows
+pyinstaller>=5.13.0
