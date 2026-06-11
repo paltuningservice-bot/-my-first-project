@@ -5,9 +5,6 @@
 
 import tkinter as tk
 from tkinter import ttk, messagebox
-from tkcalendar import Calendar
-import os
-import json
 from datetime import datetime
 
 # استيراد النماذج
@@ -36,7 +33,7 @@ class HumanitarianPlatform:
             "white": "#FFFFFF",
             "dark": "#2D3436",
             "gray": "#636E72",
-            "light_gray": "#DFE6E9",
+            "light_gray": "#F0F0F0",
             "success": "#00B894",
             "warning": "#FDCB6E",
             "danger": "#E17055"
@@ -50,7 +47,7 @@ class HumanitarianPlatform:
         main_frame = tk.Frame(self.root, bg=self.colors["white"])
         main_frame.pack(fill=tk.BOTH, expand=True)
         
-        # القائمة الجانبية
+        # القائمة الجانبية (على اليمين)
         self.create_sidebar(main_frame)
         
         # القسم الرئيسي
@@ -59,29 +56,40 @@ class HumanitarianPlatform:
     def create_sidebar(self, parent):
         """إنشاء القائمة الجانبية"""
         # إطار القائمة الجانبية
-        sidebar = tk.Frame(parent, bg=self.colors["primary"], width=250)
-        sidebar.pack(side=tk.RIGHT, fill=tk.Y)
+        sidebar = tk.Frame(parent, bg=self.colors["primary"], width=280)
+        sidebar.pack(side=tk.RIGHT, fill=tk.BOTH)
         sidebar.pack_propagate(False)
         
         # عنوان المنصة
         title_frame = tk.Frame(sidebar, bg=self.colors["primary"])
-        title_frame.pack(fill=tk.X, pady=(20, 30))
+        title_frame.pack(fill=tk.X, pady=(20, 10))
         
         tk.Label(
             title_frame,
-            text="🌟 منصة المشاريع",
-            font=("Tajawal", 18, "bold"),
+            text="🏠",
+            font=("Arial", 28),
             fg=self.colors["white"],
             bg=self.colors["primary"]
-        ).pack(pady=10)
+        ).pack(pady=(15, 5))
+        
+        tk.Label(
+            title_frame,
+            text="منصة إدارة المشاريع",
+            font=("Arial", 16, "bold"),
+            fg=self.colors["white"],
+            bg=self.colors["primary"]
+        ).pack()
         
         tk.Label(
             title_frame,
             text="الإنسانية",
-            font=("Tajawal", 14),
+            font=("Arial", 14),
             fg=self.colors["white"],
             bg=self.colors["primary"]
-        ).pack()
+        ).pack(pady=(0, 20))
+        
+        # خط فاصل
+        tk.Frame(sidebar, bg=self.colors["secondary"], height=2).pack(fill=tk.X, padx=20)
         
         # القائمة
         menu_items = [
@@ -102,18 +110,20 @@ class HumanitarianPlatform:
             btn = tk.Button(
                 sidebar,
                 text=f"  {icon}  {text}",
-                font=("Tajawal", 12),
+                font=("Arial", 12),
                 fg=self.colors["white"],
                 bg=self.colors["primary"],
                 activebackground=self.colors["secondary"],
                 activeforeground=self.colors["white"],
                 relief=tk.FLAT,
-                anchor=tk.RIGHT,
+                bd=0,
                 padx=20,
                 pady=12,
-                command=command
+                command=command,
+                anchor=tk.W,
+                cursor="hand2"
             )
-            btn.pack(fill=tk.X, padx=10, pady=2)
+            btn.pack(fill=tk.X, padx=15, pady=2)
             
     def create_main_content(self, parent):
         """إنشاء المحتوى الرئيسي"""
@@ -122,53 +132,51 @@ class HumanitarianPlatform:
         self.content_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
         # شريط البحث العلوي
-        self.create_header()
-        
-        # منطقة المحتوى
-        self.content_area = tk.Frame(self.content_frame, bg=self.colors["white"])
-        self.content_area.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
-        
-        # إظهار لوحة التحكم
-        self.show_dashboard()
-        
-    def create_header(self):
-        """إنشاء شريط البحث العلوي"""
-        header = tk.Frame(self.content_frame, bg=self.colors["white"], height=60)
-        header.pack(fill=tk.X, padx=20, pady=(10, 0))
+        header = tk.Frame(self.content_frame, bg=self.colors["white"], height=70)
+        header.pack(fill=tk.X, padx=30, pady=(15, 0))
         header.pack_propagate(False)
         
-        # شريط البحث
-        search_frame = tk.Frame(header, bg=self.colors["light_gray"], bd=0)
+        # الجهة اليمنى - شريط البحث
+        search_frame = tk.Frame(header, bg=self.colors["light_gray"])
         search_frame.pack(side=tk.RIGHT, pady=10)
         
-        self.search_entry = tk.Entry(
+        search_entry = tk.Entry(
             search_frame,
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             width=40,
             bd=0,
             bg=self.colors["light_gray"],
             fg=self.colors["gray"]
         )
-        self.search_entry.pack(side=tk.RIGHT, padx=10, pady=8)
-        self.search_entry.insert(0, "🔍 ابحث في النظام...")
+        search_entry.pack(side=tk.RIGHT, padx=15, pady=10)
+        search_entry.insert(0, "🔍 ابحث في النظام...")
         
-        # معلومات المستخدم
+        # الجهة اليسرى - معلومات المستخدم
         user_frame = tk.Frame(header, bg=self.colors["white"])
         user_frame.pack(side=tk.LEFT, pady=10)
         
         tk.Label(
             user_frame,
             text="👤 مدير النظام",
-            font=("Tajawal", 11),
-            fg=self.colors["gray"]
+            font=("Arial", 11),
+            fg=self.colors["gray"],
+            bg=self.colors["white"]
         ).pack(side=tk.RIGHT, padx=10)
         
         tk.Label(
             user_frame,
             text="📅 " + datetime.now().strftime("%Y-%m-%d"),
-            font=("Tajawal", 11),
-            fg=self.colors["gray"]
+            font=("Arial", 11),
+            fg=self.colors["gray"],
+            bg=self.colors["white"]
         ).pack(side=tk.LEFT, padx=10)
+        
+        # منطقة المحتوى
+        self.content_area = tk.Frame(self.content_frame, bg=self.colors["white"])
+        self.content_area.pack(fill=tk.BOTH, expand=True, padx=30, pady=20)
+        
+        # إظهار لوحة التحكم
+        self.show_dashboard()
         
     def clear_content(self):
         """مسح المحتوى الحالي"""
@@ -183,7 +191,7 @@ class HumanitarianPlatform:
         title = tk.Label(
             self.content_area,
             text="📊 لوحة التحكم",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         )
@@ -203,25 +211,25 @@ class HumanitarianPlatform:
             ("📈", "متوسط الإنجاز", f"{stats['avg_progress']:.1f}%", self.colors["accent2"])
         ]
         
-        for icon, title, value, color in cards_data:
+        for icon, title_text, value, color in cards_data:
             card = tk.Frame(stats_frame, bg=color, bd=0, relief=tk.RIDGE)
-            card.pack(side=tk.LEFT, padx=10, pady=5)
+            card.pack(side=tk.LEFT, padx=10, pady=5, ipadx=20, ipady=15)
             
             tk.Label(
                 card,
-                text=f"{icon} {title}",
-                font=("Tajawal", 12),
+                text=f"{icon} {title_text}",
+                font=("Arial", 12),
                 fg=self.colors["white"],
                 bg=color
-            ).pack(padx=20, pady=(15, 5))
+            ).pack(pady=(10, 5))
             
             tk.Label(
                 card,
                 text=str(value),
-                font=("Tajawal", 28, "bold"),
+                font=("Arial", 28, "bold"),
                 fg=self.colors["white"],
                 bg=color
-            ).pack(padx=20, pady=(0, 15))
+            ).pack(pady=(0, 10))
         
         # جداول البيانات
         tables_frame = tk.Frame(self.content_area, bg=self.colors["white"])
@@ -245,12 +253,12 @@ class HumanitarianPlatform:
         )
         beneficiaries_table.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         
-    def create_table(self, parent, title, columns, data):
+    def create_table(self, parent, title_text, columns, data):
         """إنشاء جدول"""
         table_frame = tk.LabelFrame(
             parent,
-            text=title,
-            font=("Tajawal", 14, "bold"),
+            text=title_text,
+            font=("Arial", 13, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"],
             padx=10,
@@ -258,17 +266,15 @@ class HumanitarianPlatform:
         )
         
         # الجدول
-        columns_count = len(columns)
         tree = ttk.Treeview(table_frame, columns=columns, show='headings', height=5)
         
         for col in columns:
             tree.heading(col, text=col)
-            tree.column(col, width=120, anchor=tk.CENTER)
+            tree.column(col, width=130, anchor=tk.CENTER)
         
         for row in data:
             values = []
             for key in columns:
-                # استخراج البيانات حسب اسم العمود
                 if "الاسم" in key:
                     values.append(row.get('name', ''))
                 elif "الجهة" in key:
@@ -298,7 +304,7 @@ class HumanitarianPlatform:
         tk.Button(
             btn_frame,
             text="عرض الكل →",
-            font=("Tajawal", 10),
+            font=("Arial", 10),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             relief=tk.FLAT,
@@ -319,7 +325,7 @@ class HumanitarianPlatform:
         tk.Label(
             title_frame,
             text="📁 إدارة المشاريع",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(side=tk.RIGHT)
@@ -327,7 +333,7 @@ class HumanitarianPlatform:
         tk.Button(
             title_frame,
             text="➕ إضافة مشروع جديد",
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             relief=tk.FLAT,
@@ -340,12 +346,12 @@ class HumanitarianPlatform:
         filter_frame = tk.Frame(self.content_area, bg=self.colors["light_gray"], padx=10, pady=10)
         filter_frame.pack(fill=tk.X, pady=(0, 20))
         
-        tk.Label(filter_frame, text="فلترة:", font=("Tajawal", 11), bg=self.colors["light_gray"]).pack(side=tk.RIGHT, padx=(0, 10))
+        tk.Label(filter_frame, text="فلترة:", font=("Arial", 11), bg=self.colors["light_gray"]).pack(side=tk.RIGHT, padx=(0, 10))
         
         status_combo = ttk.Combobox(
             filter_frame,
             values=["الكل", "نشط", "مكتمل", "متوقف"],
-            font=("Tajawal", 10),
+            font=("Arial", 10),
             width=15
         )
         status_combo.current(0)
@@ -358,7 +364,7 @@ class HumanitarianPlatform:
             tk.Label(
                 self.content_area,
                 text="📭 لا توجد مشاريع مسجلة",
-                font=("Tajawal", 16),
+                font=("Arial", 16),
                 fg=self.colors["gray"],
                 bg=self.colors["white"]
             ).pack(pady=50)
@@ -373,7 +379,7 @@ class HumanitarianPlatform:
         
         for col in columns:
             tree.heading(col, text=col)
-            tree.column(col, width=130, anchor=tk.CENTER)
+            tree.column(col, width=110, anchor=tk.CENTER)
         
         for project in projects:
             tree.insert('', tk.END, values=[
@@ -394,7 +400,7 @@ class HumanitarianPlatform:
         tk.Button(
             actions_frame,
             text="✏️ تعديل",
-            font=("Tajawal", 10),
+            font=("Arial", 10),
             bg=self.colors["secondary"],
             fg=self.colors["white"],
             relief=tk.FLAT,
@@ -405,7 +411,7 @@ class HumanitarianPlatform:
         tk.Button(
             actions_frame,
             text="🗑️ حذف",
-            font=("Tajawal", 10),
+            font=("Arial", 10),
             bg=self.colors["accent2"],
             fg=self.colors["white"],
             relief=tk.FLAT,
@@ -428,7 +434,7 @@ class HumanitarianPlatform:
         tk.Label(
             dialog,
             text="➕ إضافة مشروع جديد",
-            font=("Tajawal", 18, "bold"),
+            font=("Arial", 18, "bold"),
             fg=self.colors["primary"]
         ).pack(pady=20)
         
@@ -444,18 +450,18 @@ class HumanitarianPlatform:
         ]
         
         entries = {}
-        for label, row in fields:
-            tk.Label(dialog, text=label, font=("Tajawal", 11)).pack(pady=(10, 0))
-            entry = tk.Entry(dialog, font=("Tajawal", 11), width=50)
+        for label_text, row in fields:
+            tk.Label(dialog, text=label_text, font=("Arial", 11)).pack(pady=(10, 0))
+            entry = tk.Entry(dialog, font=("Arial", 11), width=50)
             entry.pack(pady=(5, 0))
-            entries[label] = entry
+            entries[label_text] = entry
         
         # الحالة
-        tk.Label(dialog, text="الحالة:", font=("Tajawal", 11)).pack(pady=(10, 0))
+        tk.Label(dialog, text="الحالة:", font=("Arial", 11)).pack(pady=(10, 0))
         status_combo = ttk.Combobox(
             dialog,
             values=["نشط", "مكتمل", "متوقف", "ملغي"],
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             width=47
         )
         status_combo.current(0)
@@ -468,7 +474,7 @@ class HumanitarianPlatform:
         tk.Button(
             btn_frame,
             text="حفظ",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             padx=30,
@@ -479,7 +485,7 @@ class HumanitarianPlatform:
         tk.Button(
             btn_frame,
             text="إلغاء",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["gray"],
             fg=self.colors["white"],
             padx=30,
@@ -515,7 +521,7 @@ class HumanitarianPlatform:
         tk.Label(
             title_frame,
             text="👥 إدارة المستفيدين",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(side=tk.RIGHT)
@@ -523,7 +529,7 @@ class HumanitarianPlatform:
         tk.Button(
             title_frame,
             text="➕ إضافة مستفيد جديد",
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             relief=tk.FLAT,
@@ -540,14 +546,14 @@ class HumanitarianPlatform:
         tk.Label(
             stats_frame,
             text=f"👨 عدد الذكور: {stats['male_count']}",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["light_gray"]
         ).pack(side=tk.RIGHT, padx=30)
         
         tk.Label(
             stats_frame,
             text=f"👩 عدد الإناث: {stats['female_count']}",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["light_gray"]
         ).pack(side=tk.RIGHT, padx=30)
         
@@ -558,7 +564,7 @@ class HumanitarianPlatform:
             tk.Label(
                 self.content_area,
                 text="📭 لا توجد مستفيدين مسجلين",
-                font=("Tajawal", 16),
+                font=("Arial", 16),
                 fg=self.colors["gray"],
                 bg=self.colors["white"]
             ).pack(pady=50)
@@ -573,7 +579,7 @@ class HumanitarianPlatform:
         
         for col in columns:
             tree.heading(col, text=col)
-            tree.column(col, width=120, anchor=tk.CENTER)
+            tree.column(col, width=110, anchor=tk.CENTER)
         
         for b in beneficiaries:
             tree.insert('', tk.END, values=[
@@ -599,7 +605,7 @@ class HumanitarianPlatform:
         tk.Label(
             dialog,
             text="👥 إضافة مستفيد جديد",
-            font=("Tajawal", 18, "bold"),
+            font=("Arial", 18, "bold"),
             fg=self.colors["primary"]
         ).pack(pady=20)
         
@@ -612,23 +618,23 @@ class HumanitarianPlatform:
         ]
         
         entries = {}
-        for label, row in fields:
-            tk.Label(dialog, text=label, font=("Tajawal", 11)).pack(pady=(10, 0))
-            entry = tk.Entry(dialog, font=("Tajawal", 11), width=50)
+        for label_text, row in fields:
+            tk.Label(dialog, text=label_text, font=("Arial", 11)).pack(pady=(10, 0))
+            entry = tk.Entry(dialog, font=("Arial", 11), width=50)
             entry.pack(pady=(5, 0))
-            entries[label] = entry
+            entries[label_text] = entry
         
-        tk.Label(dialog, text="الجنس:", font=("Tajawal", 11)).pack(pady=(10, 0))
+        tk.Label(dialog, text="الجنس:", font=("Arial", 11)).pack(pady=(10, 0))
         gender_combo = ttk.Combobox(
             dialog,
             values=["ذكر", "أنثى"],
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             width=47
         )
         gender_combo.pack(pady=(5, 0))
         
-        tk.Label(dialog, text="الفئة المستهدفة:", font=("Tajawal", 11)).pack(pady=(10, 0))
-        category_entry = tk.Entry(dialog, font=("Tajawal", 11), width=50)
+        tk.Label(dialog, text="الفئة المستهدفة:", font=("Arial", 11)).pack(pady=(10, 0))
+        category_entry = tk.Entry(dialog, font=("Arial", 11), width=50)
         category_entry.pack(pady=(5, 0))
         
         btn_frame = tk.Frame(dialog)
@@ -637,7 +643,7 @@ class HumanitarianPlatform:
         tk.Button(
             btn_frame,
             text="حفظ",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             padx=30,
@@ -648,7 +654,7 @@ class HumanitarianPlatform:
         tk.Button(
             btn_frame,
             text="إلغاء",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["gray"],
             fg=self.colors["white"],
             padx=30,
@@ -680,7 +686,7 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="📅 إدارة الأنشطة والفعاليات",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
@@ -688,7 +694,7 @@ class HumanitarianPlatform:
         tk.Button(
             self.content_area,
             text="➕ إضافة نشاط جديد",
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             relief=tk.FLAT,
@@ -703,7 +709,7 @@ class HumanitarianPlatform:
             tk.Label(
                 self.content_area,
                 text="📭 لا توجد أنشطة مسجلة",
-                font=("Tajawal", 16),
+                font=("Arial", 16),
                 fg=self.colors["gray"],
                 bg=self.colors["white"]
             ).pack(pady=50)
@@ -718,7 +724,7 @@ class HumanitarianPlatform:
         
         for col in columns:
             tree.heading(col, text=col)
-            tree.column(col, width=130, anchor=tk.CENTER)
+            tree.column(col, width=110, anchor=tk.CENTER)
         
         for a in activities:
             tree.insert('', tk.END, values=[
@@ -744,7 +750,7 @@ class HumanitarianPlatform:
         tk.Label(
             dialog,
             text="📅 إضافة نشاط جديد",
-            font=("Tajawal", 18, "bold"),
+            font=("Arial", 18, "bold"),
             fg=self.colors["primary"]
         ).pack(pady=20)
         
@@ -757,17 +763,17 @@ class HumanitarianPlatform:
         ]
         
         entries = {}
-        for label, row in fields:
-            tk.Label(dialog, text=label, font=("Tajawal", 11)).pack(pady=(10, 0))
-            entry = tk.Entry(dialog, font=("Tajawal", 11), width=50)
+        for label_text, row in fields:
+            tk.Label(dialog, text=label_text, font=("Arial", 11)).pack(pady=(10, 0))
+            entry = tk.Entry(dialog, font=("Arial", 11), width=50)
             entry.pack(pady=(5, 0))
-            entries[label] = entry
+            entries[label_text] = entry
         
-        tk.Label(dialog, text="نوع النشاط:", font=("Tajawal", 11)).pack(pady=(10, 0))
+        tk.Label(dialog, text="نوع النشاط:", font=("Arial", 11)).pack(pady=(10, 0))
         type_combo = ttk.Combobox(
             dialog,
             values=["تدريب", "ورشة عمل", "متابعة", "تقييم", "فعالية"],
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             width=47
         )
         type_combo.pack(pady=(5, 0))
@@ -778,7 +784,7 @@ class HumanitarianPlatform:
         tk.Button(
             btn_frame,
             text="حفظ",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             padx=30,
@@ -789,7 +795,7 @@ class HumanitarianPlatform:
         tk.Button(
             btn_frame,
             text="إلغاء",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["gray"],
             fg=self.colors["white"],
             padx=30,
@@ -821,15 +827,15 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="📊 المؤشرات والمتابعة",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
         
         tk.Label(
             self.content_area,
-            text="📈 وحدة تتبع المؤشرات والنتائج قيد التطوير...",
-            font=("Tajawal", 14),
+            text="📈 وحدة تتبع المؤشرات والنتائج",
+            font=("Arial", 14),
             fg=self.colors["gray"],
             bg=self.colors["white"]
         ).pack(pady=50)
@@ -841,7 +847,7 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="📋 التقارير",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
@@ -859,14 +865,14 @@ class HumanitarianPlatform:
             ("🎯", "تقرير الإنجازات", self.colors["secondary"])
         ]
         
-        for icon, title, color in reports:
+        for icon, title_text, color in reports:
             btn = tk.Frame(reports_frame, bg=color, bd=0, cursor="hand2")
-            btn.pack(pady=10, padx=20, fill=tk.X)
+            btn.pack(pady=10, padx=50, fill=tk.X)
             
             tk.Label(
                 btn,
-                text=f"{icon} {title}",
-                font=("Tajawal", 14),
+                text=f"{icon} {title_text}",
+                font=("Arial", 14),
                 fg=self.colors["white"],
                 bg=color,
                 padx=20,
@@ -880,15 +886,15 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="📄 إدارة الوثائق",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
         
         tk.Label(
             self.content_area,
-            text="📁 وحدة إدارة الوثائق قيد التطوير...",
-            font=("Tajawal", 14),
+            text="📁 وحدة إدارة الوثائق",
+            font=("Arial", 14),
             fg=self.colors["gray"],
             bg=self.colors["white"]
         ).pack(pady=50)
@@ -900,15 +906,15 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="🔗 الإحالات والحالات",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
         
         tk.Label(
             self.content_area,
-            text="🔗 وحدة الإحالات والحالات قيد التطوير...",
-            font=("Tajawal", 14),
+            text="🔗 وحدة الإحالات والحالات",
+            font=("Arial", 14),
             fg=self.colors["gray"],
             bg=self.colors["white"]
         ).pack(pady=50)
@@ -920,15 +926,15 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="💰 إدارة المالية",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
         
         tk.Label(
             self.content_area,
-            text="💰 وحدة إدارة المالية قيد التطوير...",
-            font=("Tajawal", 14),
+            text="💰 وحدة إدارة المالية",
+            font=("Arial", 14),
             fg=self.colors["gray"],
             bg=self.colors["white"]
         ).pack(pady=50)
@@ -940,7 +946,7 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="👤 المستخدمون والصلاحيات",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
@@ -948,7 +954,7 @@ class HumanitarianPlatform:
         tk.Button(
             self.content_area,
             text="➕ إضافة مستخدم جديد",
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             relief=tk.FLAT,
@@ -958,8 +964,8 @@ class HumanitarianPlatform:
         
         tk.Label(
             self.content_area,
-            text="👤 إدارة المستخدمين والصلاحيات قيد التطوير...",
-            font=("Tajawal", 14),
+            text="👤 إدارة المستخدمين والصلاحيات",
+            font=("Arial", 14),
             fg=self.colors["gray"],
             bg=self.colors["white"]
         ).pack(pady=50)
@@ -971,7 +977,7 @@ class HumanitarianPlatform:
         tk.Label(
             self.content_area,
             text="⚙️ الإعدادات",
-            font=("Tajawal", 24, "bold"),
+            font=("Arial", 24, "bold"),
             fg=self.colors["dark"],
             bg=self.colors["white"]
         ).pack(anchor=tk.W, pady=(0, 20))
@@ -980,7 +986,7 @@ class HumanitarianPlatform:
         lang_frame = tk.LabelFrame(
             self.content_area,
             text="🌐 إعدادات اللغة",
-            font=("Tajawal", 14),
+            font=("Arial", 14),
             fg=self.colors["dark"],
             bg=self.colors["white"],
             padx=20,
@@ -988,12 +994,12 @@ class HumanitarianPlatform:
         )
         lang_frame.pack(fill=tk.X, pady=(0, 20))
         
-        tk.Label(lang_frame, text="اللغة:", font=("Tajawal", 12), bg=self.colors["white"]).pack(side=tk.RIGHT, padx=(0, 10))
+        tk.Label(lang_frame, text="اللغة:", font=("Arial", 12), bg=self.colors["white"]).pack(side=tk.RIGHT, padx=(0, 10))
         
         lang_combo = ttk.Combobox(
             lang_frame,
             values=["العربية", "English"],
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             width=20
         )
         lang_combo.current(0)
@@ -1003,7 +1009,7 @@ class HumanitarianPlatform:
         backup_frame = tk.LabelFrame(
             self.content_area,
             text="💾 النسخ الاحتياطي",
-            font=("Tajawal", 14),
+            font=("Arial", 14),
             fg=self.colors["dark"],
             bg=self.colors["white"],
             padx=20,
@@ -1014,14 +1020,14 @@ class HumanitarianPlatform:
         tk.Label(
             backup_frame,
             text="إنشاء نسخة احتياطية من جميع البيانات:",
-            font=("Tajawal", 12),
+            font=("Arial", 12),
             bg=self.colors["white"]
         ).pack(side=tk.RIGHT, padx=(0, 10))
         
         tk.Button(
             backup_frame,
             text="💾 إنشاء نسخة احتياطية",
-            font=("Tajawal", 11),
+            font=("Arial", 11),
             bg=self.colors["primary"],
             fg=self.colors["white"],
             relief=tk.FLAT,
